@@ -123,7 +123,7 @@ public class MatrixSample extends Activity implements OnClickListener
 
 			rotateDegrees += 5;
 			imageView2.setImageBitmap(RotateBitmap(img, rotateDegrees));
-			if (rotateDegrees % 5 == 0)
+			if (rotateDegrees % 2 == 0)
 			{
 				chronometer.start();
 			} else
@@ -135,7 +135,7 @@ public class MatrixSample extends Activity implements OnClickListener
 		case R.id.reduceButton:
 			rotateDegrees -= 5;
 			imageView2.setImageBitmap(RotateBitmap(img, --rotateDegrees));
-			canvas.drawBitmap(img, rotateDegrees, rotateDegrees, null);
+			//canvas.drawBitmap(img, rotateDegrees, rotateDegrees, null);
 			chronometer.setBase(SystemClock.elapsedRealtime());
 
 			break;
