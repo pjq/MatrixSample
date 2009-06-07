@@ -3,6 +3,7 @@ package com.pjq.matrixsample;
 import android.R.integer;
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.SystemClock;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,13 +12,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory; //import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-
 
 public class MatrixSample extends Activity implements OnClickListener
 {
@@ -28,11 +29,13 @@ public class MatrixSample extends Activity implements OnClickListener
 
 	private ImageView	imageView1;
 	private ImageView	imageView2;
-	
-	private Button addButton;
-	private Button reduceButton;
 
-	public static float rotateDegrees = 0;
+	private Button		addButton;
+	private Button		reduceButton;
+	private Chronometer	chronometer;
+
+	public static float	rotateDegrees	= 0;
+
 	// 由于是自定义view,所以不需要调用Layout文件
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -42,31 +45,28 @@ public class MatrixSample extends Activity implements OnClickListener
 
 		imageView1 = (ImageView) findViewById(R.id.imageView1);
 		imageView2 = (ImageView) findViewById(R.id.imageView2);
-		addButton = (Button)findViewById(R.id.addButton);
-		reduceButton = (Button)findViewById(R.id.reduceButton);
-		
+		addButton = (Button) findViewById(R.id.addButton);
+		reduceButton = (Button) findViewById(R.id.reduceButton);
+		chronometer = (Chronometer) findViewById(R.id.chronometer);
+
 		addButton.setOnClickListener(this);
 		reduceButton.setOnClickListener(this);
-		
-		img = BitmapFactory.decodeResource(getResources(),
-				R.drawable.photo1);
+
+		img = BitmapFactory.decodeResource(getResources(), R.drawable.photo1);
 
 		imageView1.setBackgroundResource(R.drawable.photo1);
 
-	
-
 	}
-	
+
 	public Bitmap RotateBitmap(Bitmap bitmap, float degrees)
 	{
 		Matrix matrix = new Matrix();
 		matrix.postRotate(degrees);
-		
+
 		int width = img.getWidth();
-		int height =img.getHeight();
-		return  Bitmap.createBitmap(bitmap, 0,0 , width, height, matrix, true);
-		
-		
+		int height = img.getHeight();
+		return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+
 	}
 
 	public class MyView extends View
@@ -113,28 +113,37 @@ public class MatrixSample extends Activity implements OnClickListener
 
 	@Override
 	public void onClick(View v)
-	{ 
+	{
 		// TODO Auto-generated method stub
 		int id = v.getId();
-		
+
 		switch (id)
 		{
 		case R.id.addButton:
-			
-			rotateDegrees+=5;
+
+			rotateDegrees += 5;
 			imageView2.setImageBitmap(RotateBitmap(img, rotateDegrees));
+			if (rotateDegrees % 5 == 0)
+			{
+				chronometer.start();
+			} else
+			{
+				chronometer.stop();
+			}
 			break;
-			
+
 		case R.id.reduceButton:
-			rotateDegrees-=5;
+			rotateDegrees -= 5;
 			imageView2.setImageBitmap(RotateBitmap(img, --rotateDegrees));
 			canvas.drawBitmap(img, rotateDegrees, rotateDegrees, null);
+			chronometer.setBase(SystemClock.elapsedRealtime());
+
 			break;
 
 		default:
 			break;
 		}
-		
+
 	}
 
 }
